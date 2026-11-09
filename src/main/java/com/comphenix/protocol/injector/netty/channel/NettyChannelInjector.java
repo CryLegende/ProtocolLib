@@ -94,7 +94,8 @@ public class NettyChannelInjector implements Injector {
 
     // packet marking
     private final Map<Object, NetworkMarker> savedMarkers = new WeakHashMap<>(16, 0.9f);
-    private final Set<Object> skippedPackets = ConcurrentHashMap.newKeySet();
+    // compared by identity: hashing a packet (e.g. a chat record) walks its whole content
+    private final Set<Object> skippedPackets = new IdentitySkipSet();
     protected final ThreadLocal<Boolean> processedPackets = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
     // status of this injector
